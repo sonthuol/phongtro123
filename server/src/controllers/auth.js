@@ -17,3 +17,16 @@ export const register = async (req, res) => {
     });
   }
 };
+
+export const login = async (req, res) => {
+  const { phone, password } = req.body;
+  try {
+    if (!phone || !password)
+      return res.status(400).json({
+        error: 1,
+        message: "Missings input",
+      });
+    const response = await authService.login(req.body);
+    return res.status(200).json(response);
+  } catch (error) {}
+};

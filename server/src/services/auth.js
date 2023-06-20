@@ -36,3 +36,34 @@ export const register = ({ name, phone, password }) =>
       reject(error);
     }
   });
+
+export const login = ({ phone, password }) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const user = await db.User.findOne({
+        where: { phone },
+        raw: true,
+      });
+
+      const isCorrectPassword =
+        user && bcrypt.compareSync(password, user.password);
+
+      const token =
+        isCorrectPassword &&
+        jwt.sign({ id: user.id, phone: user.phone }, process.env.SECRET_KEY, {
+          expiresIn: "2d",
+        });
+
+      resolve({
+        error: token ? 0 : 2,
+        message: token
+          ? "Login is successfully"
+          : user
+          ? "Password is wrong"
+          : "Phone number not found",
+        token: token || null,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
