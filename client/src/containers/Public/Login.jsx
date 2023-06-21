@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Button, InputForm } from "../../components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as action from "../../store/actions";
 
 const Login = () => {
   const location = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const [isRegister, setIsRegister] = useState(location.state?.flag);
+  const [invalidFields, setInvalidFields] = useState([]);
   const [payload, setPayload] = useState({
     name: "",
     phone: "",
@@ -17,10 +20,76 @@ const Login = () => {
 
   useEffect(() => {
     setIsRegister(location.state?.flag);
+    setPayload({
+      name: "",
+      phone: "",
+      password: "",
+    });
+    setInvalidFields([]);
   }, [location.state?.flag]);
 
+  useEffect(() => {
+    isLoggedIn && navigate("/");
+  }, [isLoggedIn, navigate]);
+
   const handleSubmit = async () => {
-    dispatch(action.register(payload));
+    let finalPayload = isRegister
+      ? payload
+      : {
+          phone: payload.phone,
+          password: payload.password,
+        };
+    let countFieldInvalid = validate(finalPayload);
+    if (countFieldInvalid === 0)
+      dispatch(
+        isRegister ? action.register(finalPayload) : action.login(finalPayload)
+      );
+  };
+
+  const validate = (payload) => {
+    let countFieldInvalid = 0;
+    let fields = Object.entries(payload);
+    fields.forEach((field) => {
+      if (field[1] === "") {
+        setInvalidFields((prev) => [
+          ...prev,
+          {
+            name: field[0],
+            message: "Trường không được bỏ trống",
+          },
+        ]);
+        countFieldInvalid++;
+      }
+      switch (field[0]) {
+        case "password":
+          if (field[1].length < 6) {
+            setInvalidFields((prev) => [
+              ...prev,
+              {
+                name: field[0],
+                message: "Mật khẩu phải có tối thiểu 6 kí tự",
+              },
+            ]);
+            countFieldInvalid++;
+          }
+          break;
+        case "phone":
+          if (!+field[1]) {
+            setInvalidFields((prev) => [
+              ...prev,
+              {
+                name: field[0],
+                message: "Số điện thoại không hợp lệ",
+              },
+            ]);
+            countFieldInvalid++;
+          }
+          break;
+        default:
+          break;
+      }
+    });
+    return countFieldInvalid;
   };
 
   return (
@@ -31,6 +100,8 @@ const Login = () => {
       <div className="w-full flex flex-col gap-5">
         {isRegister && (
           <InputForm
+            setInvalidFields={setInvalidFields}
+            invalidFields={invalidFields}
             id="name"
             lable="HỌ VÀ TÊN "
             value={payload.name}
@@ -39,6 +110,8 @@ const Login = () => {
           />
         )}
         <InputForm
+          setInvalidFields={setInvalidFields}
+          invalidFields={invalidFields}
           id="phone"
           lable="SỐ ĐIỆN THOẠI"
           value={payload.phone}
@@ -46,6 +119,8 @@ const Login = () => {
           setValue={setPayload}
         />
         <InputForm
+          setInvalidFields={setInvalidFields}
+          invalidFields={invalidFields}
           id="password"
           lable="MẬT KHẨU"
           value={payload.password}
@@ -70,7 +145,15 @@ const Login = () => {
             Bạn đã có tài khoản ?{" "}
             <span
               className="text-[blue] hover:text-[red] cursor-pointer"
-              onClick={() => setIsRegister(false)}
+              onClick={() => {
+                setIsRegister(false);
+                setPayload({
+                  name: "",
+                  phone: "",
+                  password: "",
+                });
+                setInvalidFields([]);
+              }}
             >
               Đăng nhập ngay
             </span>
@@ -82,7 +165,15 @@ const Login = () => {
             </small>
             <small
               className="text-[blue] hover:text-[red] cursor-pointer"
-              onClick={() => setIsRegister(true)}
+              onClick={() => {
+                setIsRegister(true);
+                setPayload({
+                  name: "",
+                  phone: "",
+                  password: "",
+                });
+                setInvalidFields([]);
+              }}
             >
               Tạo một tại khoản mới
             </small>
