@@ -9,10 +9,6 @@ const InputForm = ({
   invalidFields,
   setInvalidFields,
 }) => {
-  const item = () => {
-    return invalidFields.find((i) => i.name === type)?.name;
-  };
-  console.log(item);
   return (
     <div>
       <label htmlFor={id} className="text-xs">
@@ -26,17 +22,7 @@ const InputForm = ({
         onChange={(e) =>
           setValue((prev) => ({ ...prev, [type]: e.target.value }))
         }
-        onFocus={() =>
-          setInvalidFields(
-            invalidFields.filter((filed) => {
-              return (
-                invalidFields
-                  .find((i) => i.name === type)
-                  ?.name.indexOf(filed.name) <= -1
-              );
-            })
-          )
-        }
+        onFocus={() => setInvalidFields([])}
       />
       {invalidFields.length > 0 &&
         invalidFields.some((i) => i.name === type) && (

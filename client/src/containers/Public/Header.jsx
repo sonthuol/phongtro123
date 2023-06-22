@@ -21,10 +21,6 @@ const Header = () => {
     [navigate]
   );
 
-  const handleLogout = () => {
-    dispatch(action.logout());
-  };
-
   return (
     <div className="w-1100">
       <div className="w-full flex items-center justify-between">
@@ -44,7 +40,7 @@ const Header = () => {
                 text="Đăng xuất"
                 textColor="text-white"
                 bgColor="bg-secondary2"
-                onClick={() => handleLogout()}
+                onClick={() => dispatch(action.logout())}
               />
             </>
           )}
