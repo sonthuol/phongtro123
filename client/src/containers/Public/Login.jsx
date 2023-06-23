@@ -4,12 +4,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as action from "../../store/actions";
+import Sweetalert from "sweetalert2";
 
 const Login = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, message, update } = useSelector((state) => state.auth);
   const [isRegister, setIsRegister] = useState(location.state?.flag);
   const [invalidFields, setInvalidFields] = useState([]);
   const [payload, setPayload] = useState({
@@ -31,6 +32,10 @@ const Login = () => {
   useEffect(() => {
     isLoggedIn && navigate("/");
   }, [isLoggedIn, navigate]);
+
+  useEffect(() => {
+    message && Sweetalert.fire("Opps!", message, "error");
+  }, [message, update]);
 
   const handleSubmit = async () => {
     let finalPayload = isRegister
@@ -105,7 +110,7 @@ const Login = () => {
             id="name"
             lable="HỌ VÀ TÊN "
             value={payload.name}
-            type="name"
+            keyPayload="name"
             setValue={setPayload}
           />
         )}
@@ -115,7 +120,7 @@ const Login = () => {
           id="phone"
           lable="SỐ ĐIỆN THOẠI"
           value={payload.phone}
-          type="phone"
+          keyPayload="phone"
           setValue={setPayload}
         />
         <InputForm
@@ -124,6 +129,7 @@ const Login = () => {
           id="password"
           lable="MẬT KHẨU"
           value={payload.password}
+          keyPayload="password"
           type="password"
           setValue={setPayload}
         />
