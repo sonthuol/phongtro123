@@ -28,7 +28,7 @@ const Header = () => {
           src={logo}
           alt="logo"
           className="w-[240px] h-[70px] object-contain"
-          onClick={() => navigate(path.HOME)}
+          onClick={() => navigate("/")}
         />
         <div className="flex items-center gap-1">
           {isLoggedIn && (
