@@ -1,9 +1,12 @@
 import express from "express";
+import * as authController from "../controllers/auth";
 
 const routes = express.Router();
 
-routes.get("/login", (req, res) => {
-  return res.status(200).json("oki");
-});
+// Register
+routes.post("/register", authController.register);
+
+// Login
+routes.post("/login", authController.login);
 
 export default routes;

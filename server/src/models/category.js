@@ -13,10 +13,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Category.init(
     {
-      name: DataTypes.STRING,
-      password: DataTypes.STRING,
-      phone: DataTypes.STRING,
-      zalo: DataTypes.STRING,
+      code: DataTypes.STRING,
+      value: DataTypes.STRING,
+      header: DataTypes.STRING,
+      subheader: DataTypes.STRING,
     },
     {
       sequelize,
