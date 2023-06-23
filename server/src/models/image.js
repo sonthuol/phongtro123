@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Image.init(
     {
-      images: DataTypes.STRING,
+      images: DataTypes.TEXT,
     },
     {
       sequelize,

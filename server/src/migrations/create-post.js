@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.STRING,
       },
-      tile: {
+      title: {
         type: Sequelize.STRING,
       },
       star: {
