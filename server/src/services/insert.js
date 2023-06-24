@@ -50,7 +50,7 @@ export const insert = () =>
 
         await db.Image.create({
           id: imagesId,
-          images: JSON.stringify(item?.images),
+          image: JSON.stringify(item?.images),
         });
 
         await db.Label.findOrCreate({

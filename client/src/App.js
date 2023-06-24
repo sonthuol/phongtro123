@@ -12,7 +12,7 @@ import Homepage from "./containers/Public/Homepage";
 
 function App() {
   return (
-    <div className="h-screen w-screen bg-primary">
+    <div className="w-screen w-screen bg-primary">
       <Routes>
         <Route path={path.HOME} Component={Home}>
           <Route path="*" Component={Homepage} />
