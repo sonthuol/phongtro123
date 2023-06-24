@@ -7,12 +7,13 @@ module.exports = {
         1100: "1100px",
       },
       backgroundColor: {
-        primary: "#F5F5F5",
+        primary: "#f5f5f5",
         secondary1: "#1266DD",
         secondary2: "#F73859",
       },
       maxWidth: {
         600: "600px",
+        1100: "1100px",
       },
     },
   },

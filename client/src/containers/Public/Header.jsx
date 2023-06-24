@@ -22,7 +22,7 @@ const Header = () => {
   );
 
   return (
-    <div className="w-1100">
+    <div className="lg:w-4/5 w-full">
       <div className="w-full flex items-center justify-between">
         <img
           src={logo}
@@ -33,7 +33,7 @@ const Header = () => {
         <div className="flex items-center gap-1">
           {isLoggedIn && (
             <>
-              <small className="hover:underline">
+              <small className="hover:underline hidden md:inline lg:inline">
                 Phongtro123.com Xin chào!
               </small>
               <Button
@@ -41,6 +41,7 @@ const Header = () => {
                 textColor="text-white"
                 bgColor="bg-secondary2"
                 onClick={() => dispatch(action.logout())}
+                buttonHeader
               />
             </>
           )}
