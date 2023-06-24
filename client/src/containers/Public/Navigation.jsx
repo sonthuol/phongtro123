@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { apiGetCategories } from "../../services/category";
-import { convertToSlug } from "../../utils/constant";
+import { convertToSlug } from "../../utils/Common/convertVietNameseToSlug";
 
 const noActive =
   "hover:bg-secondary2 px-4 h-full flex items-center bg-secondary1";
@@ -22,8 +22,8 @@ const Navigation = () => {
   }, []);
 
   return (
-    <div className="w-screen flex justify-center items-center h-[40px] text-white bg-secondary1 mb-3">
-      <div className="w-1100 flex h-full items-center text-sm font-medium">
+    <div className="hidden w-screen lg:flex md:flex justify-center items-center h-[40px] text-white bg-secondary1 mb-3">
+      <div className="w-4/5 flex h-full items-center text-sm font-medium">
         <NavLink
           to="/"
           className={({ isActive }) => (isActive ? active : noActive)}
