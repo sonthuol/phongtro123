@@ -21,6 +21,14 @@ function PostItem({
 
   address = address.split(",");
   address = `${address[address.length - 2]}, ${address[address.length - 1]}`;
+
+  const handleStar = (star) => {
+    let stars = [];
+    for (let index = 1; index <= +star; index++) {
+      stars.push(<GrStar size="18" color="orange" className="inline-block" />);
+    }
+    return stars;
+  };
   return (
     <div className="w-full flex border-t border-red-500 py-4">
       <div className="w-2/5 flex flex-wrap gap-[2px] items-center relative cursor-pointer">
@@ -55,11 +63,9 @@ function PostItem({
       <div className="w-3/5">
         <div className="flex justify-between gap-4">
           <div className="text-red-600 text-[18px] font-semibold">
-            <GrStar size="18" color="orange" className="inline-block" />
-            <GrStar size="18" color="orange" className="inline-block" />
-            <GrStar size="18" color="orange" className="inline-block" />
-            <GrStar size="18" color="orange" className="inline-block" />
-            <GrStar size="18" color="orange" className="inline-block" />
+            {handleStar(+star).map((item, index) => {
+              return <span key={index}>{item}</span>;
+            })}
             <span>{title}</span>
           </div>
           <div>
