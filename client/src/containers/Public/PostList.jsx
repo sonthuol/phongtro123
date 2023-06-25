@@ -2,14 +2,15 @@ import React, { useEffect } from "react";
 import { Button } from "../../components";
 import { PostItem } from "./index";
 import { useDispatch, useSelector } from "react-redux";
-import { getPosts } from "../../store/actions/post";
+import { getPostsLimit } from "../../store/actions/post";
 
-function PostList() {
+function PostList({ page }) {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.posts);
   useEffect(() => {
-    dispatch(getPosts());
-  }, [dispatch]);
+    let offset = page ? page - 1 : 0;
+    dispatch(getPostsLimit(offset));
+  }, [dispatch, page]);
 
   return (
     <div className="w-full p-2 bg-white shadow-md px-4">

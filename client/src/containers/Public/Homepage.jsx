@@ -1,9 +1,12 @@
 import React from "react";
 import { text } from "../../utils/constant";
-import { Province } from "../../components";
+import { Pagination, Province } from "../../components";
 import { PostList } from "./index";
+import { useSearchParams } from "react-router-dom";
 
 function Homepage() {
+  const [params] = useSearchParams();
+
   return (
     <div className="border border-red-400 w-full flex flex-col gap-3">
       <div>
@@ -13,7 +16,8 @@ function Homepage() {
       <Province />
       <div className="w-full flex gap-4">
         <div className="w-full lg:w-[70%]">
-          <PostList />
+          <PostList page={params?.get("page")} />
+          <Pagination page={params?.get("page")} />
         </div>
         <div className="hidden lg:w-[30%] lg:inline border border-gray-600">
           Side bar
