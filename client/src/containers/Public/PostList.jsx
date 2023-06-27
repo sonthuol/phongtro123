@@ -37,6 +37,7 @@ function PostList({ page }) {
               star={post?.star}
               title={post?.title}
               user={post?.user}
+              id={post?.id}
             />
           );
         })}

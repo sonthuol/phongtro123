@@ -10,3 +10,4 @@ export { default as Homepage } from "./Homepage";
 export { default as Search } from "./Search";
 export { default as PostList } from "./PostList";
 export { default as PostItem } from "./PostItem";
+export { default as DetailPost } from "./DetailPost";
