@@ -8,7 +8,7 @@ const { GrLinkNext, GrLinkPrevious } = icons;
 const Pagination = ({ page }) => {
   const { count, posts } = useSelector((state) => state.posts);
   const [pageArray, setPageArray] = useState([]);
-  const [currentPage, setCurrentPage] = useState(page);
+  const [currentPage, setCurrentPage] = useState(page <= 0 && 1);
   const [isHidentEnd, setIsHidentEnd] = useState(false);
   const [isHidentStart, setIsHidentStart] = useState(false);
 

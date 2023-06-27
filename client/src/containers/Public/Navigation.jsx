@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { apiGetCategories } from "../../services/category";
 import { convertToSlug } from "../../utils/Common/convertVietNameseToSlug";
+import { useDispatch, useSelector } from "react-redux";
+import * as action from "../../store/actions";
 
 const noActive =
   "hover:bg-secondary2 px-4 h-full flex items-center bg-secondary1";
@@ -9,17 +10,12 @@ const active =
   "hover:bg-secondary2 px-4 h-full flex items-center bg-secondary2";
 
 const Navigation = () => {
-  const [categories, setCategories] = useState([]);
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.app);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      const response = await apiGetCategories();
-      if (response?.data.error === 0) {
-        setCategories(response.data.data);
-      }
-    };
-    fetchCategories();
-  }, []);
+    dispatch(action.getCategories());
+  }, [dispatch]);
 
   return (
     <div className="hidden w-screen lg:flex md:flex justify-center items-center h-[40px] text-white bg-secondary1 mb-3">

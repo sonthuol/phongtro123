@@ -1,5 +1,7 @@
 import React, { memo, useState } from "react";
 import icons from "../../utils/icons";
+import { Link } from "react-router-dom";
+import { convertToSlug } from "../../utils/Common/convertVietNameseToSlug";
 
 const { GrStar, RiHeartFill, RiHeartLine, BsFillBookmarkStarFill } = icons;
 
@@ -13,6 +15,7 @@ function PostItem({
   star,
   title,
   user,
+  id,
 }) {
   const [isHoverHeart, setIsOverHeart] = useState(false);
   images = images.filter(
@@ -31,7 +34,10 @@ function PostItem({
   };
   return (
     <div className="w-full flex border-t border-red-500 py-4">
-      <div className="w-2/5 flex flex-wrap gap-[2px] items-center relative cursor-pointer">
+      <Link
+        to={`chi-tiet/${convertToSlug(title)}/${id}`}
+        className="w-2/5 flex flex-wrap gap-[2px] items-center relative cursor-pointer"
+      >
         {images.length >= 0 &&
           images
             .filter((image, index) => indexs.some((i) => i === index))
@@ -59,7 +65,7 @@ function PostItem({
             <RiHeartLine size={24} />
           )}
         </span>
-      </div>
+      </Link>
       <div className="w-3/5">
         <div className="flex justify-between gap-4">
           <div className="text-red-600 text-[18px] font-semibold">
