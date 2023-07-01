@@ -6,13 +6,14 @@ import {
   RentalHouse,
   RentalRoom,
   RentalSpace,
+  DetailPost,
 } from "./containers/Public";
 import { path } from "./utils/constant";
 import Homepage from "./containers/Public/Homepage";
 
 function App() {
   return (
-    <div className="h-screen w-screen bg-primary">
+    <div className="w-screen bg-primary">
       <Routes>
         <Route path={path.HOME} Component={Home}>
           <Route path="*" Component={Homepage} />
@@ -21,6 +22,10 @@ function App() {
           <Route path={path.NHA_CHO_THUE} Component={RentalHouse} />
           <Route path={path.CHO_THUE_MAT_BANG} Component={RentalSpace} />
           <Route path={path.CHO_THUE_PHONG_TRO} Component={RentalRoom} />
+          <Route
+            path={path.DETAIL_POST__TITLE__POSTID}
+            Component={DetailPost}
+          />
         </Route>
       </Routes>
     </div>
