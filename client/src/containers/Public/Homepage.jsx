@@ -9,10 +9,12 @@ import * as action from "../../store/actions";
 function Homepage() {
   const [params] = useSearchParams();
   const dispatch = useDispatch();
-  const { categories } = useSelector((state) => state.app);
+  const { categories, prices, acreages } = useSelector((state) => state.app);
 
   useEffect(() => {
     dispatch(action.getCategories());
+    dispatch(action.getPrices());
+    dispatch(action.getAcreages());
   }, [dispatch]);
 
   return (
@@ -29,8 +31,8 @@ function Homepage() {
         </div>
         <div className="hidden lg:w-[30%] border border-gray-600 lg:flex lg:flex-col justify-start items-center gap-4">
           <ItemSidebar title="Danh mục cho thuê" content={categories} />
-          <ItemSidebar title="Xem theo giá" />
-          <ItemSidebar title="Xem theo diện tích" />
+          <ItemSidebar title="Xem theo giá" content={prices} isDouble />
+          <ItemSidebar title="Xem theo diện tích" content={acreages} isDouble />
         </div>
       </div>
     </div>

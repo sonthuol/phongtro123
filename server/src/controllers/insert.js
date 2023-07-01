@@ -11,3 +11,15 @@ export const insert = async (req, res) => {
     });
   }
 };
+
+export const insertPriceAndAcreage = async (req, res) => {
+  try {
+    const response = await insertService.createPriceAndAcreage();
+    return res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      error: -1,
+      message: "Fail at auth controller " + error,
+    });
+  }
+};
