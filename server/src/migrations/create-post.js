@@ -24,6 +24,12 @@ module.exports = {
       attributeId: {
         type: Sequelize.STRING,
       },
+      priceCode: {
+        type: Sequelize.STRING,
+      },
+      acreageCode: {
+        type: Sequelize.STRING,
+      },
       categoryCode: {
         type: Sequelize.STRING,
       },
