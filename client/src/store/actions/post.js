@@ -8,7 +8,7 @@ export const getPosts = () => async (dispatch) => {
     if (response?.data.error === 0) {
       dispatch({
         type: actionType.GET_POSTS,
-        posts: response.data.data,
+        allPosts: response.data.data,
       });
     } else {
       dispatch({
@@ -19,14 +19,14 @@ export const getPosts = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: actionType.GET_POSTS,
-      posts: null,
+      allPosts: null,
     });
   }
 };
 
-export const getPostsLimit = (page) => async (dispatch) => {
+export const getPostsLimit = (query) => async (dispatch) => {
   try {
-    const response = await apiGetPostsLimit(page);
+    const response = await apiGetPostsLimit(query);
     if (response?.data.error === 0) {
       dispatch({
         type: actionType.GET_POSTS_LIMIT,

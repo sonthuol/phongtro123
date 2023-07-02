@@ -2,18 +2,26 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { PageNumber } from "./index";
 import icons from "../utils/icons";
+import { useSearchParams } from "react-router-dom";
 
 const { GrLinkNext, GrLinkPrevious } = icons;
 
-const Pagination = ({ page }) => {
+const Pagination = () => {
+  const [searchParams] = useSearchParams();
   const { count, posts } = useSelector((state) => state.posts);
   const [pageArray, setPageArray] = useState([]);
-  const [currentPage, setCurrentPage] = useState(page <= 0 && 1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isHidentEnd, setIsHidentEnd] = useState(false);
   const [isHidentStart, setIsHidentStart] = useState(false);
 
   useEffect(() => {
-    let maxPage = Math.floor(count / posts.length);
+    let page = searchParams.get("page");
+    !page && setCurrentPage(1);
+    page && +page !== currentPage && setCurrentPage(+page);
+  }, [searchParams, currentPage]);
+
+  useEffect(() => {
+    let maxPage = Math.ceil(count / process.env.REACT_APP_LIMIT_PAGE);
     let start =
       +currentPage - 3 > maxPage
         ? maxPage
@@ -26,8 +34,8 @@ const Pagination = ({ page }) => {
       temp.push(i);
     }
     setPageArray(temp);
-    currentPage + 3 >= maxPage ? setIsHidentEnd(true) : setIsHidentEnd(false);
     currentPage - 3 <= 1 ? setIsHidentStart(true) : setIsHidentStart(false);
+    currentPage + 3 >= maxPage ? setIsHidentEnd(true) : setIsHidentEnd(false);
   }, [count, posts, currentPage]);
 
   return (
@@ -42,7 +50,7 @@ const Pagination = ({ page }) => {
           <PageNumber page="..." isNotClick />
         </>
       )}
-      {pageArray.length > 0 &&
+      {pageArray.length > 1 &&
         pageArray.map((pageNumber) => {
           return (
             <PageNumber
