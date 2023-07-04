@@ -13,12 +13,27 @@ export const apiGetPosts = () =>
     }
   });
 
-export const apiGetPostsLimit = (page) =>
+export const apiGetPostsLimit = (query) =>
   new Promise(async (resolve, reject) => {
     try {
       const response = await axiosConfig({
         method: "get",
-        url: `/posts/limit?page=${page}`,
+        url: `/posts/limit`,
+        params: query,
+      });
+      resolve(response);
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+export const apiGetNewPosts = (query) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await axiosConfig({
+        method: "get",
+        url: `/posts/new-posts`,
+        params: query,
       });
       resolve(response);
     } catch (error) {
