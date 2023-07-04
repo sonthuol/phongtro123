@@ -3,23 +3,14 @@ import { Button } from "../../components";
 import { PostItem } from "./index";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostsLimit } from "../../store/actions/post";
-import { useSearchParams } from "react-router-dom";
 
-function PostList({ categoryCode }) {
-  const [searchParams] = useSearchParams();
+function PostList({ page }) {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.posts);
-
   useEffect(() => {
-    let param = [];
-    for (let entry of searchParams.entries()) {
-      param.push(entry);
-    }
-    let a = {};
-    param?.map((i) => (a = { ...a, [i[0]]: i[1] }));
-    if (categoryCode) a.categoryCode = categoryCode;
-    dispatch(getPostsLimit(a));
-  }, [categoryCode, dispatch, searchParams]);
+    let offset = page ? page - 1 : 0;
+    dispatch(getPostsLimit(offset));
+  }, [dispatch, page]);
 
   return (
     <div className="w-full p-2 bg-white shadow-md px-4">
