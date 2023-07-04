@@ -5,7 +5,7 @@ export const getCategories = () =>
   new Promise(async (resolve, reject) => {
     try {
       const response = await db.Category.findAll({
-        attributes: ["code", "value", "header", "subheader"],
+        attributes: ["code", "value"],
         raw: true,
       });
       resolve(response);

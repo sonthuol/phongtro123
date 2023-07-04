@@ -1,6 +1,5 @@
 import { apiGetAcreages } from "../../services/acreage";
 import { apiGetCategories } from "../../services/category";
-import { apiGetNewPosts } from "../../services/post";
 import { apiGetPrices } from "../../services/price";
 import actionType from "./actionType";
 
@@ -66,28 +65,6 @@ export const getAcreages = () => async (dispatch) => {
     dispatch({
       type: actionType.GET_ACREAGES,
       acreages: null,
-    });
-  }
-};
-
-export const getNewPosts = () => async (dispatch) => {
-  try {
-    const response = await apiGetNewPosts();
-    if (response?.data.error === 0) {
-      dispatch({
-        type: actionType.GET_NEW_POST,
-        newPosts: response.data.data,
-      });
-    } else {
-      dispatch({
-        type: actionType.GET_NEW_POST,
-        message: response.data.message,
-      });
-    }
-  } catch (error) {
-    dispatch({
-      type: actionType.GET_NEW_POST,
-      newPosts: null,
     });
   }
 };

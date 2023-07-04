@@ -291,7 +291,7 @@ export const insert = () =>
           labelCode,
           address: item?.header?.address,
           attributeId,
-          categoryCode: "NCT",
+          categoryCode: "NCH",
           description: JSON.stringify(item?.mainContent?.content),
           userId,
           acreageCode: dataAcreages.find(
