@@ -7,13 +7,11 @@ import {
 } from "../../components";
 import { PostList } from "./index";
 import { useLocation, useSearchParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import * as action from "../../store/actions";
 import { convertToSlug } from "../../utils/Common/convertVietNameseToSlug";
+import { useSelector } from "react-redux";
 
-const RentalRoom = () => {
+const RentalApartment = () => {
   const [params] = useSearchParams();
-  const dispatch = useDispatch();
   const location = useLocation();
   const { prices, acreages, categories } = useSelector((state) => state.app);
 
@@ -29,11 +27,6 @@ const RentalRoom = () => {
       setCategoryCode(category.code);
     }
   }, [categories, location]);
-
-  useEffect(() => {
-    dispatch(action.getPrices());
-    dispatch(action.getAcreages());
-  }, [dispatch]);
 
   return (
     <div className="w-full flex flex-col gap-3">
@@ -71,4 +64,4 @@ const RentalRoom = () => {
   );
 };
 
-export default RentalRoom;
+export default RentalApartment;

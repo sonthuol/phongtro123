@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { text } from "../../utils/constant";
 import {
   ItemSidebar,
@@ -8,18 +8,11 @@ import {
 } from "../../components";
 import { PostList } from "./index";
 import { useSearchParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import * as action from "../../store/actions";
+import { useSelector } from "react-redux";
 
 function Homepage() {
   const [params] = useSearchParams();
-  const dispatch = useDispatch();
   const { categories, prices, acreages } = useSelector((state) => state.app);
-
-  useEffect(() => {
-    dispatch(action.getPrices());
-    dispatch(action.getAcreages());
-  }, [dispatch]);
 
   return (
     <div className="w-full flex flex-col gap-3">

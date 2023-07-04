@@ -1,15 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import RelatedItemPost from "./RelatedItemPost";
-import { useDispatch, useSelector } from "react-redux";
-import * as actions from "../store/actions";
+import { useSelector } from "react-redux";
 
 const RelatedPost = () => {
   const { newPosts } = useSelector((state) => state.app);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(actions.getNewPosts());
-  }, [dispatch]);
 
   return (
     <div className="p-4 rounded-md bg-white w-full">
