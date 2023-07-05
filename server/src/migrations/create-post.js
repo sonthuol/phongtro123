@@ -18,6 +18,9 @@ module.exports = {
       labelCode: {
         type: Sequelize.STRING,
       },
+      ProvinceCode: {
+        type: Sequelize.STRING,
+      },
       address: {
         type: Sequelize.STRING,
       },

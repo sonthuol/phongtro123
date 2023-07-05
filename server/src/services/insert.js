@@ -32,6 +32,9 @@ export const insert = () =>
           item?.header?.attributes?.acreage
         );
         let currentPrice = getNumberFromString(item?.header?.attributes?.price);
+        let provinceCode = generateCode(
+          item?.header?.address.split(",").slice(-1)[0]
+        );
         await db.Post.create({
           id: postId,
           title: item?.header?.title,
@@ -50,8 +53,16 @@ export const insert = () =>
             (price) => price.max > currentPrice && price.min <= currentPrice
           )?.code,
           overviewId,
-
+          provinceCode,
           imagesId,
+        });
+
+        await db.Province.findOrCreate({
+          where: { code: provinceCode },
+          defaults: {
+            code: provinceCode,
+            value: item?.header?.address.split(",").slice(-1)[0],
+          },
         });
 
         await db.Attribute.create({
@@ -116,6 +127,9 @@ export const insert = () =>
           item?.header?.attributes?.acreage
         );
         let currentPrice = getNumberFromString(item?.header?.attributes?.price);
+        let provinceCode = generateCode(
+          item?.header?.address.split(",").slice(-1)[0]
+        );
         await db.Post.create({
           id: postId,
           title: item?.header?.title,
@@ -134,8 +148,16 @@ export const insert = () =>
             (price) => price.max > currentPrice && price.min <= currentPrice
           )?.code,
           overviewId,
-
+          provinceCode,
           imagesId,
+        });
+
+        await db.Province.findOrCreate({
+          where: { code: provinceCode },
+          defaults: {
+            code: provinceCode,
+            value: item?.header?.address.split(",").slice(-1)[0],
+          },
         });
 
         await db.Attribute.create({
@@ -200,6 +222,9 @@ export const insert = () =>
           item?.header?.attributes?.acreage
         );
         let currentPrice = getNumberFromString(item?.header?.attributes?.price);
+        let provinceCode = generateCode(
+          item?.header?.address.split(",").slice(-1)[0]
+        );
         await db.Post.create({
           id: postId,
           title: item?.header?.title,
@@ -218,8 +243,16 @@ export const insert = () =>
             (price) => price.max > currentPrice && price.min <= currentPrice
           )?.code,
           overviewId,
-
+          provinceCode,
           imagesId,
+        });
+
+        await db.Province.findOrCreate({
+          where: { code: provinceCode },
+          defaults: {
+            code: provinceCode,
+            value: item?.header?.address.split(",").slice(-1)[0],
+          },
         });
 
         await db.Attribute.create({
@@ -284,6 +317,9 @@ export const insert = () =>
           item?.header?.attributes?.acreage
         );
         let currentPrice = getNumberFromString(item?.header?.attributes?.price);
+        let provinceCode = generateCode(
+          item?.header?.address.split(",").slice(-1)[0]
+        );
         await db.Post.create({
           id: postId,
           title: item?.header?.title,
@@ -302,8 +338,16 @@ export const insert = () =>
             (price) => price.max > currentPrice && price.min <= currentPrice
           )?.code,
           overviewId,
-
+          provinceCode,
           imagesId,
+        });
+
+        await db.Province.findOrCreate({
+          where: { code: provinceCode },
+          defaults: {
+            code: provinceCode,
+            value: item?.header?.address.split(",").slice(-1)[0],
+          },
         });
 
         await db.Attribute.create({
