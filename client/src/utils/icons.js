@@ -6,6 +6,7 @@ import { RiCrop2Line, RiHeartFill, RiHeartLine } from "react-icons/ri";
 import { LuDelete } from "react-icons/lu";
 import { FiSearch } from "react-icons/fi";
 import { GrStar, GrLinkNext, GrLinkPrevious, GrNext } from "react-icons/gr";
+import { BiArrowBack } from "react-icons/bi";
 
 const icons = {
   AiOutlinePlusCircle,
@@ -23,6 +24,7 @@ const icons = {
   GrLinkNext,
   GrLinkPrevious,
   GrNext,
+  BiArrowBack,
 };
 
 export default icons;

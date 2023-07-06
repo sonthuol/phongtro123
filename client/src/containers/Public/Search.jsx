@@ -1,6 +1,7 @@
-import React from "react";
-import { SearchItem } from "../../components/index";
+import React, { useState } from "react";
+import { Model, SearchItem } from "../../components";
 import icons from "../../utils/icons";
+import { useSelector } from "react-redux";
 
 const {
   BsChevronRight,
@@ -13,34 +14,85 @@ const {
 } = icons;
 
 function Search() {
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [content, setContent] = useState(false);
+  const [name, setName] = useState();
+  const [title, setTitle] = useState();
+
+  const { categories, provinces, prices, acreages } = useSelector(
+    (state) => state.app
+  );
+
+  const handleShowModal = (content, name, title) => {
+    setContent(content);
+    setName(name);
+    setTitle(title);
+    setIsShowModal(true);
+  };
   return (
-    <div className="p-[10px] w-full lg:w-4/5 bg-[#febb02] rounded-lg flex flex-col lg:flex-row md:flex-row items-center justify-around gap-2">
-      <SearchItem
-        text="Phòng trọ, nhà trọ"
-        iconStart={<TbBuilding />}
-        iconEnd={<LuDelete color="black" fontWeight="blod" fontSize="18" />}
-        fontWeight
-      />
-      <SearchItem
-        text="Toàn quốc"
-        iconStart={<HiOutlineLocationMarker />}
-        iconEnd={<BsChevronRight color="rgb(156, 163,175)" />}
-      />
-      <SearchItem
-        text="Chọn giá"
-        iconStart={<TbReportMoney />}
-        iconEnd={<BsChevronRight color="rgb(156, 163,175)" />}
-      />
-      <SearchItem
-        text="Chọn diện tích"
-        iconStart={<RiCrop2Line />}
-        iconEnd={<BsChevronRight color="rgb(156, 163,175)" />}
-      />
-      <button className="flex items-center justify-center gap-1 py-2 px-4 w-full rounded-md text-[13px] bg-secondary1 text-white">
-        <FiSearch />
-        Tìm kiếm
-      </button>
-    </div>
+    <>
+      <div className="p-[10px] w-full lg:w-4/5 bg-[#febb02] rounded-lg flex flex-col lg:flex-row md:flex-row items-center justify-around gap-2">
+        <span
+          className="flex-1 cursor-pointer"
+          onClick={() =>
+            handleShowModal(categories, "categories", "Phòng trọ, nhà trọ")
+          }
+        >
+          <SearchItem
+            text="Phòng trọ, nhà trọ"
+            iconStart={<TbBuilding />}
+            iconEnd={<LuDelete color="black" fontWeight="blod" fontSize="18" />}
+            fontWeight
+          />
+        </span>
+
+        <span
+          className="flex-1 cursor-pointer"
+          onClick={() => handleShowModal(provinces, "provinces", "Toàn quốc")}
+        >
+          <SearchItem
+            text="Toàn quốc"
+            iconStart={<HiOutlineLocationMarker />}
+            iconEnd={<BsChevronRight color="rgb(156, 163,175)" />}
+          />
+        </span>
+
+        <span
+          className="flex-1 cursor-pointer"
+          onClick={() => handleShowModal(prices, "prices", "Chọn giá")}
+        >
+          <SearchItem
+            text="Chọn giá"
+            iconStart={<TbReportMoney />}
+            iconEnd={<BsChevronRight color="rgb(156, 163,175)" />}
+          />
+        </span>
+        <span
+          className="flex-1 cursor-pointer"
+          onClick={() =>
+            handleShowModal(acreages, "acreages", "Chọn diện tích")
+          }
+        >
+          <SearchItem
+            text="Chọn diện tích"
+            iconStart={<RiCrop2Line />}
+            iconEnd={<BsChevronRight color="rgb(156, 163,175)" />}
+          />
+        </span>
+        <button className="flex w-fit items-center justify-center gap-1 py-2 px-4 rounded-md text-[13px] bg-secondary1 text-white">
+          <FiSearch />
+          Tìm kiếm
+        </button>
+      </div>
+      {isShowModal && (
+        <Model
+          setIsShowModal={setIsShowModal}
+          content={content}
+          name={name}
+          title={title}
+        />
+      )}
+    </>
   );
 }
 
