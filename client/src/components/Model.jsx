@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import icons from "../utils/icons";
 
 const { BiArrowBack } = icons;
@@ -9,6 +9,19 @@ const Model = ({ setIsShowModal, content, name, title }) => {
       index ===
       self.findIndex((t) => t.code === value.code && t.value === value.value)
   );
+  const [persentStart, setPersentStart] = useState(0);
+  const [perSentEnd, setPersentEnd] = useState(100);
+
+  useEffect(() => {
+    const activeTrackEl = document.getElementById("track-active");
+    activeTrackEl.style.left = `${persentStart}%`;
+  }, [persentStart]);
+
+  useEffect(() => {
+    const activeTrackEl = document.getElementById("track-active");
+    activeTrackEl.style.right = `${100 - perSentEnd}%`;
+  }, [perSentEnd]);
+
   return (
     <div
       onClick={() => setIsShowModal(false)}
@@ -33,31 +46,62 @@ const Model = ({ setIsShowModal, content, name, title }) => {
           </span>
           <span className="w-[95%] text-center">{title}</span>
         </div>
-        <div className="p-4 flex flex-col">
-          {content
-            ?.filter((item, index) => content?.indexOf(item) === index)
-            ?.map((item) => {
-              return (
-                <span
-                  key={item.code}
-                  className="py-1 flex items-center gap-2 border-b border-gray-100"
-                >
-                  <input
-                    type="radio"
-                    name={name}
-                    id={item.code}
-                    value={item.code}
-                  />
-                  <label
-                    className="w-full hover:text-blue-600"
-                    htmlFor={item.code}
+        {(name === "categories" || name === "provinces") && (
+          <div className="p-4 flex flex-col">
+            {content
+              ?.filter((item, index) => content?.indexOf(item) === index)
+              ?.map((item) => {
+                return (
+                  <span
+                    key={item.code}
+                    className="py-1 flex items-center gap-2 border-b border-gray-100"
                   >
-                    {item.value}
-                  </label>
-                </span>
-              );
-            })}
-        </div>
+                    <input
+                      type="radio"
+                      name={name}
+                      id={item.code}
+                      value={item.code}
+                    />
+                    <label
+                      className="w-full hover:text-blue-600"
+                      htmlFor={item.code}
+                    >
+                      {item.value}
+                    </label>
+                  </span>
+                );
+              })}
+          </div>
+        )}
+        {(name === "prices" || name === "acreages") && (
+          <div className="p-12">
+            <div className="flex flex-col items-center justify-center relative">
+              <div className="slider-track h-[5px] absolute top-0 bottom-0 w-full bg-gray-300 rounded-md"></div>
+              <div
+                id="track-active"
+                className="slider-track:active h-[5px] absolute top-0 bottom-0 bg-orange-500 rounded-md"
+              ></div>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={5}
+                value={persentStart}
+                onChange={(e) => setPersentStart(e.target.value)}
+                className="w-full appearance-none pointer-events-none absolute top-0 bottom-0"
+              />
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={5}
+                value={perSentEnd}
+                onChange={(e) => setPersentEnd(e.target.value)}
+                className="w-full appearance-none pointer-events-none absolute top-0 bottom-0"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
