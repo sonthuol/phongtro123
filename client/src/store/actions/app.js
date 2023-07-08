@@ -103,7 +103,6 @@ export const getNewPosts = () => async (dispatch) => {
 export const getProvinces = () => async (dispatch) => {
   try {
     const response = await apiGetProvinces();
-    console.log(response);
     if (response?.data.error === 0) {
       dispatch({
         type: actionType.GET_PROVINCE,

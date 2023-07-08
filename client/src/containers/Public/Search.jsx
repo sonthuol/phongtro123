@@ -17,7 +17,6 @@ function Search() {
   const [isShowModal, setIsShowModal] = useState(false);
   const [content, setContent] = useState(false);
   const [name, setName] = useState();
-  const [title, setTitle] = useState();
 
   const { categories, provinces, prices, acreages } = useSelector(
     (state) => state.app
@@ -26,7 +25,6 @@ function Search() {
   const handleShowModal = (content, name, title) => {
     setContent(content);
     setName(name);
-    setTitle(title);
     setIsShowModal(true);
   };
   return (
@@ -48,7 +46,7 @@ function Search() {
 
         <span
           className="flex-1 cursor-pointer"
-          onClick={() => handleShowModal(provinces, "provinces", "Toàn quốc")}
+          onClick={() => handleShowModal(provinces, "provinces")}
         >
           <SearchItem
             text="Toàn quốc"
@@ -59,7 +57,7 @@ function Search() {
 
         <span
           className="flex-1 cursor-pointer"
-          onClick={() => handleShowModal(prices, "prices", "Chọn giá")}
+          onClick={() => handleShowModal(prices, "prices")}
         >
           <SearchItem
             text="Chọn giá"
@@ -69,9 +67,7 @@ function Search() {
         </span>
         <span
           className="flex-1 cursor-pointer"
-          onClick={() =>
-            handleShowModal(acreages, "acreages", "Chọn diện tích")
-          }
+          onClick={() => handleShowModal(acreages, "acreages")}
         >
           <SearchItem
             text="Chọn diện tích"
@@ -85,12 +81,7 @@ function Search() {
         </button>
       </div>
       {isShowModal && (
-        <Model
-          setIsShowModal={setIsShowModal}
-          content={content}
-          name={name}
-          title={title}
-        />
+        <Model setIsShowModal={setIsShowModal} content={content} name={name} />
       )}
     </>
   );
