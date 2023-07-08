@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Model, SearchItem } from "../../components";
 import icons from "../../utils/icons";
 import { useSelector } from "react-redux";
@@ -17,6 +17,8 @@ function Search() {
   const [isShowModal, setIsShowModal] = useState(false);
   const [content, setContent] = useState(false);
   const [name, setName] = useState();
+  const [queries, setQueries] = useState({});
+  const [arrMaxMin, setArrMinMax] = useState({});
 
   const { categories, provinces, prices, acreages } = useSelector(
     (state) => state.app
@@ -27,17 +29,26 @@ function Search() {
     setName(name);
     setIsShowModal(true);
   };
+
+  const handleSubmit = useCallback((e, query, arrMaxMin) => {
+    e.stopPropagation();
+    setQueries((prev) => ({ ...prev, ...query }));
+    arrMaxMin && setArrMinMax((prev) => ({ ...prev, ...arrMaxMin }));
+    setIsShowModal(false);
+  }, []);
+
   return (
     <>
       <div className="p-[10px] w-full lg:w-4/5 bg-[#febb02] rounded-lg flex flex-col lg:flex-row md:flex-row items-center justify-around gap-2">
         <span
           className="flex-1 cursor-pointer"
           onClick={() =>
-            handleShowModal(categories, "categories", "Phòng trọ, nhà trọ")
+            handleShowModal(categories, "category", "Phòng trọ, nhà trọ")
           }
         >
           <SearchItem
-            text="Phòng trọ, nhà trọ"
+            text={queries.category}
+            defaultText="Phòng trọ, nhà trọ"
             iconStart={<TbBuilding />}
             iconEnd={<LuDelete color="black" fontWeight="blod" fontSize="18" />}
             fontWeight
@@ -46,10 +57,11 @@ function Search() {
 
         <span
           className="flex-1 cursor-pointer"
-          onClick={() => handleShowModal(provinces, "provinces")}
+          onClick={() => handleShowModal(provinces, "province")}
         >
           <SearchItem
-            text="Toàn quốc"
+            text={queries.province}
+            defaultText="Toàn quốc"
             iconStart={<HiOutlineLocationMarker />}
             iconEnd={<BsChevronRight color="rgb(156, 163,175)" />}
           />
@@ -57,20 +69,22 @@ function Search() {
 
         <span
           className="flex-1 cursor-pointer"
-          onClick={() => handleShowModal(prices, "prices")}
+          onClick={() => handleShowModal(prices, "price")}
         >
           <SearchItem
-            text="Chọn giá"
+            text={queries.price}
+            defaultText="Chọn giá"
             iconStart={<TbReportMoney />}
             iconEnd={<BsChevronRight color="rgb(156, 163,175)" />}
           />
         </span>
         <span
           className="flex-1 cursor-pointer"
-          onClick={() => handleShowModal(acreages, "acreages")}
+          onClick={() => handleShowModal(acreages, "acreage")}
         >
           <SearchItem
-            text="Chọn diện tích"
+            text={queries.acreage}
+            defaultText="Chọn diện tích"
             iconStart={<RiCrop2Line />}
             iconEnd={<BsChevronRight color="rgb(156, 163,175)" />}
           />
@@ -81,7 +95,14 @@ function Search() {
         </button>
       </div>
       {isShowModal && (
-        <Model setIsShowModal={setIsShowModal} content={content} name={name} />
+        <Model
+          setIsShowModal={setIsShowModal}
+          content={content}
+          name={name}
+          handleSubmit={handleSubmit}
+          queries={queries}
+          arrMaxMin={arrMaxMin}
+        />
       )}
     </>
   );

@@ -1,30 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import icons from "../utils/icons";
+import { getNumberAcreages, getNumberPrices } from "../utils/Common/getNumbers";
+import { getAcreages, getPrices } from "../utils/Common/getCodes";
 
 const { BiArrowBack } = icons;
 
-const Model = ({ setIsShowModal, content, name }) => {
+const Model = ({
+  setIsShowModal,
+  content,
+  name,
+  handleSubmit,
+  queries,
+  arrMaxMin,
+}) => {
   content = content?.filter(
     (value, index, self) =>
       index ===
       self.findIndex((t) => t.code === value.code && t.value === value.value)
   );
-  const [persentStart, setPersentStart] = useState(0);
-  const [perSentEnd, setPersentEnd] = useState(100);
+
+  const [persentStart, setPersentStart] = useState(
+    name === "price"
+      ? arrMaxMin?.price?.[0]
+      : name === "acreage"
+      ? arrMaxMin?.acreage?.[0]
+      : 0
+  );
+  const [persentEnd, setPersentEnd] = useState(
+    name === "price"
+      ? arrMaxMin?.price?.[1]
+      : name === "acreage"
+      ? arrMaxMin?.acreage?.[1]
+      : 100
+  );
+
   const [codeActive, setCodeActive] = useState("");
 
   useEffect(() => {
     const activeTrackEl = document.getElementById("track-active");
+    if (persentEnd === undefined || persentStart === undefined) {
+      setPersentStart(0);
+      setPersentEnd(100);
+    }
     if (activeTrackEl) {
-      if (perSentEnd <= persentStart) {
-        activeTrackEl.style.left = `${perSentEnd}%`;
+      if (persentEnd <= persentStart) {
+        activeTrackEl.style.left = `${persentEnd}%`;
         activeTrackEl.style.right = `${100 - persentStart}%`;
       } else {
         activeTrackEl.style.left = `${persentStart}%`;
-        activeTrackEl.style.right = `${100 - perSentEnd}%`;
+        activeTrackEl.style.right = `${100 - persentEnd}%`;
       }
     }
-  }, [perSentEnd, persentStart]);
+  }, [persentEnd, persentStart]);
 
   const handleTrack = (e) => {
     e.stopPropagation();
@@ -33,7 +60,7 @@ const Model = ({ setIsShowModal, content, name }) => {
     let percent = Math.round(
       ((e.clientX - trackReact.left) * 100) / trackReact.width
     );
-    if (Math.abs(percent - persentStart) <= Math.abs(percent - perSentEnd)) {
+    if (Math.abs(percent - persentStart) <= Math.abs(percent - persentEnd)) {
       setPersentStart(percent);
     } else {
       setPersentEnd(percent);
@@ -41,33 +68,20 @@ const Model = ({ setIsShowModal, content, name }) => {
   };
 
   const convert100ToTarget = (percent) => {
-    if (name === "prices")
+    if (name === "price")
       return (Math.ceil(Math.round(percent * 1.5) / 5) * 5) / 10;
-    if (name === "acreages")
-      return Math.ceil(Math.round(percent * 0.9) / 5) * 5;
+    if (name === "acreage") return Math.ceil(Math.round(percent * 0.9) / 5) * 5;
   };
 
   const convertTargetTo100 = (price) => {
-    let target = name === "prices" ? 15 : name === "acreages" ? 90 : 1;
+    let target = name === "price" ? 15 : name === "acreage" ? 90 : 1;
     return Math.floor((price / target) * 100);
   };
-
-  const getNumbers = (string) =>
-    string
-      .split(" ")
-      .map((item) => +item)
-      .filter((item) => !item === false);
-
-  const getNumberAcreage = (string) =>
-    string
-      .split(" ")
-      .map((item) => +item.match(/\d+/))
-      .filter((item) => item !== 0);
 
   const handlePrices = (code, value) => {
     setCodeActive(code);
     let arrMaxMin =
-      name === "prices" ? getNumbers(value) : getNumberAcreage(value);
+      name === "price" ? getNumberPrices(value) : getNumberAcreages(value);
     if (arrMaxMin.length === 1) {
       if (arrMaxMin[0] === 1) {
         setPersentStart(0);
@@ -89,12 +103,34 @@ const Model = ({ setIsShowModal, content, name }) => {
     }
   };
 
-  const handleSubmit = () => {
-    console.log(
-      "start: " +
-        convert100ToTarget(persentStart) +
-        " -> " +
-        convert100ToTarget(perSentEnd)
+  const handleBeforSubmit = (e) => {
+    const gaps =
+      name === "price"
+        ? getPrices(
+            [convert100ToTarget(persentStart), convert100ToTarget(persentEnd)],
+            content
+          )
+        : name === "acreage"
+        ? getAcreages(
+            [convert100ToTarget(persentStart), convert100ToTarget(persentEnd)],
+            content
+          )
+        : [];
+    handleSubmit(
+      e,
+      {
+        [`${name}Code`]: gaps?.map((item) => item.code),
+        [name]:
+          +convert100ToTarget(persentStart) === 0
+            ? `Dưới ${convert100ToTarget(persentEnd)} triệu`
+            : +convert100ToTarget(persentStart) !==
+              convert100ToTarget(persentEnd)
+            ? `Từ ${convert100ToTarget(persentStart)} đến ${convert100ToTarget(
+                persentEnd
+              )} triệu`
+            : `Trên ${convert100ToTarget(persentStart)} triệu`,
+      },
+      { [name]: [persentStart, persentEnd] }
     );
   };
 
@@ -121,7 +157,7 @@ const Model = ({ setIsShowModal, content, name }) => {
             <BiArrowBack size={24} />
           </span>
         </div>
-        {(name === "categories" || name === "provinces") && (
+        {(name === "category" || name === "province") && (
           <div className="p-12 flex flex-col">
             {content
               ?.filter((item, index) => content?.indexOf(item) === index)
@@ -136,6 +172,15 @@ const Model = ({ setIsShowModal, content, name }) => {
                       name={name}
                       id={item.code}
                       value={item.code}
+                      defaultChecked={
+                        item.code === queries[`${name}Code`] ? true : false
+                      }
+                      onClick={(e) =>
+                        handleSubmit(e, {
+                          [name]: item.value,
+                          [`${name}Code`]: item.code,
+                        })
+                      }
                     />
                     <label
                       className="w-full hover:text-blue-600"
@@ -148,23 +193,39 @@ const Model = ({ setIsShowModal, content, name }) => {
               })}
           </div>
         )}
-        {(name === "prices" || name === "acreages") && (
+        {(name === "price" || name === "acreage") && (
           <div className="p-12">
             <div className="flex flex-col items-center justify-center relative">
               <div className="z-30 absolute top-[-48px] font-bold text-xl text-orange-500 mt-1">
-                {`${name === "prices" ? "Từ" : ""} ${
-                  persentStart <= perSentEnd
-                    ? convert100ToTarget(persentStart)
-                    : convert100ToTarget(perSentEnd)
-                }
+                {persentStart === 100 && persentEnd === 100
+                  ? `Trên ${
+                      persentEnd >= persentStart
+                        ? convert100ToTarget(persentEnd)
+                        : convert100ToTarget(persentStart)
+                    } ${
+                      name === "price"
+                        ? " triệu"
+                        : name === "acreage"
+                        ? "m2"
+                        : ""
+                    }`
+                  : `${name === "price" ? "Từ" : ""} ${
+                      persentStart <= persentEnd
+                        ? convert100ToTarget(persentStart)
+                        : convert100ToTarget(persentEnd)
+                    }
                 -
                 ${
-                  perSentEnd >= persentStart
-                    ? convert100ToTarget(perSentEnd)
+                  persentEnd >= persentStart
+                    ? convert100ToTarget(persentEnd)
                     : convert100ToTarget(persentStart)
                 } ${
-                  name === "prices" ? " triệu" : name === "acreages" ? "m2" : ""
-                }`}
+                      name === "price"
+                        ? " triệu"
+                        : name === "acreage"
+                        ? "m2"
+                        : ""
+                    }`}
               </div>
               <div
                 onClick={handleTrack}
@@ -181,7 +242,7 @@ const Model = ({ setIsShowModal, content, name }) => {
                 min={0}
                 max={100}
                 step={1}
-                value={persentStart}
+                value={persentStart || 0}
                 onChange={(e) => {
                   setPersentStart(+e.target.value);
                   codeActive && setCodeActive("");
@@ -193,7 +254,7 @@ const Model = ({ setIsShowModal, content, name }) => {
                 min={0}
                 max={100}
                 step={1}
-                value={perSentEnd}
+                value={persentEnd || 100}
                 onChange={(e) => {
                   setPersentEnd(+e.target.value);
                   codeActive && setCodeActive("");
@@ -217,9 +278,9 @@ const Model = ({ setIsShowModal, content, name }) => {
                   }}
                   className="cursor-pointer"
                 >
-                  {name === "prices"
+                  {name === "price"
                     ? "15 triệu +"
-                    : name === "acreages"
+                    : name === "acreage"
                     ? 90
                     : ""}
                 </span>
@@ -245,18 +306,17 @@ const Model = ({ setIsShowModal, content, name }) => {
             </div>
           </div>
         )}
-        {name === "prices" ||
-          (name === "acreages" && (
-            <button
-              className="w-full bg-[#febb02] py-2 font-medium uppercase rounded-bl-md rounded-br-md"
-              onClick={handleSubmit}
-            >
-              Áp dụng
-            </button>
-          ))}
+        {(name === "price" || name === "acreage") && (
+          <button
+            className="w-full bg-[#febb02] py-2 font-medium uppercase rounded-bl-md rounded-br-md"
+            onClick={handleBeforSubmit}
+          >
+            Áp dụng
+          </button>
+        )}
       </div>
     </div>
   );
 };
 
-export default Model;
+export default memo(Model);
