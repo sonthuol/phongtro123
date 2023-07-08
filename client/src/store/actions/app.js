@@ -2,6 +2,7 @@ import { apiGetAcreages } from "../../services/acreage";
 import { apiGetCategories } from "../../services/category";
 import { apiGetNewPosts } from "../../services/post";
 import { apiGetPrices } from "../../services/price";
+import { apiGetProvinces } from "../../services/province";
 import actionType from "./actionType";
 
 export const getCategories = () => async (dispatch) => {
@@ -11,11 +12,13 @@ export const getCategories = () => async (dispatch) => {
       dispatch({
         type: actionType.GET_CATEGORIES,
         categories: response.data.data,
+        message: "",
       });
     } else {
       dispatch({
         type: actionType.GET_CATEGORIES,
         message: response.data.message,
+        categories: null,
       });
     }
   } catch (error) {
@@ -33,11 +36,13 @@ export const getPrices = () => async (dispatch) => {
       dispatch({
         type: actionType.GET_PRICES,
         prices: response.data.data,
+        message: "",
       });
     } else {
       dispatch({
         type: actionType.GET_PRICES,
         message: response.data.message,
+        prices: null,
       });
     }
   } catch (error) {
@@ -55,11 +60,13 @@ export const getAcreages = () => async (dispatch) => {
       dispatch({
         type: actionType.GET_ACREAGES,
         acreages: response.data.data,
+        message: "",
       });
     } else {
       dispatch({
         type: actionType.GET_ACREAGES,
         message: response.data.message,
+        acreages: null,
       });
     }
   } catch (error) {
@@ -77,6 +84,7 @@ export const getNewPosts = () => async (dispatch) => {
       dispatch({
         type: actionType.GET_NEW_POST,
         newPosts: response.data.data,
+        message: "",
       });
     } else {
       dispatch({
@@ -88,6 +96,29 @@ export const getNewPosts = () => async (dispatch) => {
     dispatch({
       type: actionType.GET_NEW_POST,
       newPosts: null,
+    });
+  }
+};
+
+export const getProvinces = () => async (dispatch) => {
+  try {
+    const response = await apiGetProvinces();
+    if (response?.data.error === 0) {
+      dispatch({
+        type: actionType.GET_PROVINCE,
+        provinces: response.data.data,
+        message: "",
+      });
+    } else {
+      dispatch({
+        type: actionType.GET_PROVINCE,
+        message: response.data.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: actionType.GET_PROVINCE,
+      provinces: null,
     });
   }
 };

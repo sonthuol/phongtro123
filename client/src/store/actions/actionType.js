@@ -10,6 +10,7 @@ const actionType = {
   GET_CATEGORIES: "GET_CATEGORIES",
   GET_PRICES: "GET_PRICES",
   GET_ACREAGES: "GET_ACREAGES",
+  GET_PROVINCE: "GET_PROVINCE",
 };
 
 export default actionType;

@@ -14,6 +14,7 @@ const Home = () => {
     dispatch(action.getPrices());
     dispatch(action.getAcreages());
     dispatch(action.getNewPosts());
+    dispatch(action.getProvinces());
   }, [dispatch]);
 
   return (
